@@ -23,8 +23,12 @@
     <header class="ui-element">
         <div class="logo">Ibento</div>
         <nav id="mainNav">
-            <a onclick="openOverlay('about')">About</a>
-            <a onclick="openOverlay('contact')">Contact</a>
+<a onclick="openOverlay('users')">Users</a>
+<a onclick="openOverlay('register')">Register User</a>
+<a onclick="openOverlay('photos')">User Photos</a>
+<a onclick="openOverlay('menu')">Menu</a>
+
+
             <button class="fullscreen-btn" id="fullscreenBtn" aria-label="Toggle Fullscreen">
                 <svg viewBox="0 0 24 24">
                     <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
@@ -117,62 +121,72 @@
             <div class="nav-arrow prev ui-element">‹</div>
             <div class="nav-arrow next ui-element">›</div>
 
-            <!-- Dots -->
-            <div class="dots-container ui-element">
-                <span class="dot active" data-slide="0"></span>
-                <span class="dot" data-slide="1"></span>
-                <span class="dot" data-slide="2"></span>
-                <span class="dot" data-slide="3"></span>
-                <span class="dot" data-slide="4"></span>
-                <span class="dot" data-slide="5"></span>
-                <span class="dot" data-slide="6"></span>
-                <span class="dot" data-slide="7"></span>
-                <span class="dot" data-slide="8"></span>
-            </div>
+
         </div>
     </div>
 
-    <!-- Global Parallax Shapes -->
     <div class="parallax-shape shape-1 ui-element"></div>
     <div class="parallax-shape shape-2 ui-element"></div>
 
-    <!-- Play/Pause Button -->
-    <button class="play-pause-btn ui-element" id="playPauseBtn" aria-label="Play/Pause Slideshow">
-        <svg viewBox="0 0 24 24">
-            <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
-        </svg>
+
+
+
+
+    <!-- Users List Overlay -->
+<div class="overlay" id="usersOverlay">
+  <div class="overlay-content">
+    <button class="close-btn" onclick="closeOverlay('users')">×</button>
+    <h2>Registered Users</h2>
+
+    <div id="usersList"></div>
+  </div>
+</div>
+<!-- MENU EDITOR (ADMIN ONLY) -->
+<div class="overlay" id="menuOverlay">
+  <div class="overlay-content">
+    <button class="close-btn" onclick="closeOverlay('menu')">×</button>
+    <h2>Edit Event Menu</h2>
+
+    <textarea
+      id="menuTextarea"
+      placeholder="Enter full menu here..."
+      style="
+        width:100%;
+        height:300px;
+        padding:15px;
+        border-radius:12px;
+        background:#111;
+        color:#fff;
+        border:1px solid rgba(255,255,255,0.15);
+        resize:vertical;
+      "
+    ></textarea>
+
+    <button class="submit-btn" onclick="saveMenu()" style="margin-top:15px;">
+      Save Menu
     </button>
 
-    <!-- Progress Bar -->
-    <div class="progress-bar-container ui-element">
-        <div class="progress-bar" id="progressBar"></div>
-    </div>
+    <p id="menuSavedMsg" style="display:none; margin-top:10px; color:#7CFFB2;">
+      Menu saved successfully ✔
+    </p>
+  </div>
+</div>
 
-    <!-- Duration Controls -->
-    <div class="duration-controls ui-element">
-        <button class="duration-btn" id="decreaseDuration" aria-label="Decrease Duration">−</button>
-        <div class="duration-display" id="durationDisplay">5<span>s</span></div>
-        <button class="duration-btn" id="increaseDuration" aria-label="Increase Duration">+</button>
-    </div>
+<!-- User Photos Overlay -->
+<div class="overlay" id="photosOverlay">
+  <div class="overlay-content">
+    <button class="close-btn" onclick="closeOverlay('photos')">×</button>
+    <h2 id="photoUserTitle">User Photos</h2>
 
-    <!-- About Overlay -->
-    <div class="overlay" id="aboutOverlay">
-        <div class="overlay-content">
-            <button class="close-btn" onclick="closeOverlay('about')">×</button>
-            <h2>About Us</h2>
-            <p>Welcome to Living Parallax, where visual storytelling meets cutting-edge design. We believe in the power of images to inspire, captivate, and transport viewers to extraordinary places.</p>
-            <p>Our mission is to showcase the world's most breathtaking landscapes and moments through an immersive, interactive experience. Each image is carefully curated to evoke emotion and wonder, utilizing parallax scrolling technology to create depth and movement that brings photography to life.</p>
-            <p>Every scroll reveals new perspectives, every movement adds dimension, and every image tells a story waiting to be discovered.</p>
-            <p>Take control of your time with <a href="https://timermo.com" rel="nofollow" target="_blank">TimerMo</a> today. Bring your designs to life with <a href="https://www.vectorsticker.com" rel="nofollow" target="_blank">VectorSticker</a> resources.</p>
-            <p>Living Parallax is a free HTML template designed by <a href="https://www.tooplate.com" target="_blank" rel="nofollow noopener">Tooplate</a> for creating stunning fullscreen image galleries.</p>
-            <p>UI toggle button to hide/show all interface elements for distraction-free viewing</p>
-            <p>Keyboard navigation (Arrow keys for slides, H key for UI toggle)</p>
-            <p>Auto-play controls with play/pause functionality</p>
-            <p>Smooth overlay panels for About, Testimonials, and Contact sections</p>
-            <p>Beautiful stock photography provided by <a href="https://unsplash.com" target="_blank" rel="nofollow noopener">Unsplash</a>, enhanced with interactive parallax effects and customizable slideshow timing.</p>
-            <img src="images/about-mountain.jpg" alt="Mountain landscape" class="overlay-image">
-        </div>
+    <div id="photoGrid">
+      <!-- images injected here -->
     </div>
+  </div>
+</div>
+
+
+
+  
 
 
     <!-- Contact Overlay -->
@@ -220,6 +234,43 @@
             </div>
         </div>
     </div>
+<!-- Register User Overlay -->
+<div class="overlay" id="registerOverlay">
+  <div class="overlay-content">
+    <button class="close-btn" onclick="closeOverlay('register')">×</button>
+    <h2>Register User</h2>
+
+    <label>Username</label>
+    <input type="text" id="regUsername" placeholder="username">
+
+    <label>Password</label>
+    <input type="password" id="regPassword" placeholder="password">
+
+    <label>User Type</label>
+    <select id="regRole">
+      <option value="guest">Event Guest</option>
+      <option value="photographer">Photographer</option>
+    </select>
+<p
+  id="registerSuccessMsg"
+  style="
+    display:none;
+    margin-top:15px;
+    padding:12px 16px;
+    border-radius:12px;
+    background: rgba(0, 255, 150, 0.12);
+    border: 1px solid rgba(0, 255, 150, 0.4);
+    color: #a8ffdc;
+    font-weight: 500;
+    text-align: center;
+  "
+>
+  User created successfully ^ ^ 
+</p>
+
+    <button class="submit-btn" onclick="registerUser()">Create User</button>
+  </div>
+</div>
 
   
  

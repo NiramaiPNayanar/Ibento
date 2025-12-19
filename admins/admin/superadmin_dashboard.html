@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Super Admin page</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="../admin/assets/admin.css">
+</head>
+
+<body>
+
+<!-- UI Toggle -->
+<button class="ui-toggle-btn" id="uiToggleBtn">
+  <svg viewBox="0 0 24 24" id="eyeIcon">
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+    <circle cx="12" cy="12" r="3"/>
+  </svg>
+</button>
+
+<!-- HEADER -->
+<header class="ui-element">
+  <div class="logo">Ibento — Super Admin</div>
+
+  <nav id="mainNav">
+    <a onclick="openOverlay('users')">Users</a>
+    <a onclick="openOverlay('register')">Register User</a>
+    <a onclick="openOverlay('photos')">User Photos</a>
+    <a onclick="openOverlay('menu')">Menu</a>
+
+    <button class="fullscreen-btn" id="fullscreenBtn">
+      <svg viewBox="0 0 24 24">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+      </svg>
+    </button>
+  </nav>
+
+  <div class="menu-toggle" id="menuToggle">
+    <span></span><span></span><span></span>
+  </div>
+</header>
+
+<!-- SLIDER (UNCHANGED) -->
+<div class="slider-wrapper">
+  <div class="slider-container" id="slider">
+    <div class="slide active"><div class="parallax-layer background-layer"><img src="images/mountain-dreams.jpg"></div></div>
+    <div class="slide"><div class="parallax-layer background-layer"><img src="images/forest-whispers.jpg"></div></div>
+    <div class="slide"><div class="parallax-layer background-layer"><img src="images/ocean-serenity.jpg"></div></div>
+    <div class="slide"><div class="parallax-layer background-layer"><img src="images/golden-hour.jpg"></div></div>
+    <div class="slide"><div class="parallax-layer background-layer"><img src="images/spring-bloom.jpg"></div></div>
+    <div class="slide"><div class="parallax-layer background-layer"><img src="images/desert-vastness.jpg"></div></div>
+    <div class="slide"><div class="parallax-layer background-layer"><img src="images/waterfall-majesty.jpg"></div></div>
+    <div class="slide"><div class="parallax-layer background-layer"><img src="images/wild-encounters.jpg"></div></div>
+    <div class="slide"><div class="parallax-layer background-layer"><img src="images/summit-glory.jpg"></div></div>
+
+    <div class="nav-arrow prev ui-element">‹</div>
+    <div class="nav-arrow next ui-element">›</div>
+  </div>
+</div>
+
+<div class="parallax-shape shape-1 ui-element"></div>
+<div class="parallax-shape shape-2 ui-element"></div>
+
+<!-- USERS -->
+<div class="overlay" id="usersOverlay">
+  <div class="overlay-content">
+    <button class="close-btn" onclick="closeOverlay('users')">×</button>
+    <h2>Registered Users</h2>
+    <div id="usersList"></div>
+  </div>
+</div>
+
+<!-- PHOTOS -->
+<div class="overlay" id="photosOverlay">
+  <div class="overlay-content">
+    <button class="close-btn" onclick="closeOverlay('photos')">×</button>
+    <h2 id="photoUserTitle">User Photos</h2>
+    <div id="photoGrid"></div>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div class="overlay" id="registerOverlay">
+  <div class="overlay-content">
+    <button class="close-btn" onclick="closeOverlay('register')">×</button>
+    <h2>Create User / Admin</h2>
+
+    <label>Username</label>
+    <input type="text" id="regUsername">
+
+    <label>Password</label>
+    <input type="password" id="regPassword">
+
+    <label>User Type</label>
+    <select id="regRole">
+      <option value="guest">Event Guest</option>
+      <option value="photographer">Photographer</option>
+      <option value="admin">Admin</option>
+    </select>
+
+    <p id="registerSuccessMsg" style="display:none;">User created successfully ✔</p>
+    <button class="submit-btn" onclick="registerUser()">Create</button>
+  </div>
+</div>
+
+<!-- MENU OVERLAY (NEW) -->
+<div class="overlay" id="menuOverlay">
+  <div class="overlay-content">
+    <button class="close-btn" onclick="closeOverlay('menu')">×</button>
+    <h2>Edit Menu</h2>
+
+    <textarea
+      id="menuText"
+      rows="14"
+      style="width:100%; border-radius:12px; padding:14px;"
+      placeholder="Enter full menu here..."
+    ></textarea>
+
+    <button class="submit-btn" style="margin-top:15px;" onclick="saveMenu()">
+      Save Menu
+    </button>
+
+    <p id="menuSavedMsg" style="display:none; margin-top:10px;">
+      Menu saved successfully ✔
+    </p>
+  </div>
+</div>
+
+<script src="./assets/admin.js"></script>
+<script src="./assets/superadmin.js"></script>
+
+</body>
+</html>

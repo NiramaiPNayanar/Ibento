@@ -5,26 +5,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
-  <!-- HTML5 UP Main CSS -->
   <link rel="stylesheet" href="assets/css/main.css" />
 
-  <!-- PERMANENT SCROLLBAR HIDE (scroll still works) -->
   <style>
-    /* Chrome, Edge, Safari */
-    ::-webkit-scrollbar {
-      width: 0;
-      height: 0;
-    }
-
-    /* Firefox */
-    html {
-      scrollbar-width: none;
-    }
-
-    /* IE / old Edge */
-    body {
-      -ms-overflow-style: none;
-    }
+    ::-webkit-scrollbar { width: 0; height: 0; }
+    html { scrollbar-width: none; }
+    body { -ms-overflow-style: none; }
   </style>
 </head>
 
@@ -81,7 +67,7 @@
 
             <div class="col-12">
               <p id="errorMsg" style="color:#d9534f; display:none;">
-                Please enter a valid email and password (min 6 characters).
+                Invalid email or password.
               </p>
             </div>
 
@@ -96,16 +82,16 @@
   <section id="footer">
     <footer>
       <ul class="icons">
-        <li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
-        <li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
-        <li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
-        <li><a href="#" class="icon brands alt fa-dribbble"><span class="label">Dribbble</span></a></li>
-        <li><a href="#" class="icon solid alt fa-envelope"><span class="label">Email</span></a></li>
+        <li><a href="#" class="icon brands alt fa-twitter"></a></li>
+        <li><a href="#" class="icon brands alt fa-facebook-f"></a></li>
+        <li><a href="#" class="icon brands alt fa-instagram"></a></li>
+        <li><a href="#" class="icon brands alt fa-dribbble"></a></li>
+        <li><a href="#" class="icon solid alt fa-envelope"></a></li>
       </ul>
     </footer>
   </section>
 
-  <!-- HTML5 UP Scripts -->
+  <!-- Template Scripts -->
   <script src="assets/js/jquery.min.js"></script>
   <script src="assets/js/jquery.scrollex.min.js"></script>
   <script src="assets/js/jquery.scrolly.min.js"></script>
@@ -114,10 +100,9 @@
   <script src="assets/js/util.js"></script>
   <script src="assets/js/main.js"></script>
 
-  <!-- SCROLL CONTROL + LOGIN LOGIC -->
+  <!-- LOGIN LOGIC -->
   <script>
-    /* Always start at top on reload/open */
-    if ('scrollRestoration' in history) {
+        if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
     }
     window.scrollTo(0, 0);
@@ -133,28 +118,46 @@
         });
       }, 1500);
     });
-
-    /* Client-side validation */
-    document.getElementById("loginForm").addEventListener("submit", function (e) {
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
 
-      const email = document.getElementById("email");
-      const password = document.getElementById("password");
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
       const errorMsg = document.getElementById("errorMsg");
-
-      if (!email.checkValidity() || !password.checkValidity()) {
-        errorMsg.style.display = "block";
-        return;
-      }
 
       errorMsg.style.display = "none";
 
-      console.log("Login data:", {
-        email: email.value,
-        password: password.value
-      });
+      try {
+        const res = await fetch("http://localhost:5000/api/auth/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password })
+        });
 
-      // Backend integration later
+        if (!res.ok) {
+          errorMsg.style.display = "block";
+          return;
+        }
+
+        const data = await res.json();
+
+        // Save session
+        localStorage.setItem("userId", data.id);
+        localStorage.setItem("role", data.role);
+
+        // Redirect (FRONTEND PATHS ONLY)
+if (data.role === "admin") {
+  window.location.href = "/admins/admin/admin_dashboard.html";
+} else if (data.role === "superadmin") {
+  window.location.href = "/admins/admin/superadmin_dashboard.html";
+} else {
+  window.location.href = "/QR/qr page/qr_main.html";
+}
+
+
+      } catch (err) {
+        errorMsg.style.display = "block";
+      }
     });
   </script>
 

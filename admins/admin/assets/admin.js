@@ -1,2 +1,312 @@
+/* ================= SAFETY HELPERS ================= */
+const $ = (q) => document.querySelector(q);
+const $$ = (q) => document.querySelectorAll(q);
 
-const slider=document.getElementById("slider"),slides=document.querySelectorAll(".slide"),dots=document.querySelectorAll(".dot"),prevBtn=document.querySelector(".nav-arrow.prev"),nextBtn=document.querySelector(".nav-arrow.next"),menuToggle=document.getElementById("menuToggle"),mainNav=document.getElementById("mainNav");let autoPlayInterval,progressInterval,progressStart,currentSlide=0,isAnimating=!1,mouseX=0,mouseY=0,isPausedByUser=!1,slideDuration=5e3;function updateParallax(){const e=slides[currentSlide].querySelector(".background-layer"),t=document.querySelectorAll(".parallax-shape");e&&(e.style.transform=`translate(${20*mouseX}px, ${20*mouseY}px)`),t.forEach((e,t)=>{if(e.style.transform&&e.style.transform.includes("rotate"))return;const n=15*(t+1);e.style.transform=`translate(${mouseX*n}px, ${mouseY*n}px)`})}function getTransitionDuration(){return currentDuration<=3?300:700}function showSlide(e){if(isAnimating)return;isAnimating=!0;const t=getTransitionDuration();document.documentElement.style.setProperty("--slide-transition-duration",t+"ms"),slides.forEach(e=>{e.classList.remove("active","prev")}),dots.forEach(e=>e.classList.remove("active")),currentSlide!==e&&slides[currentSlide].classList.add("prev"),slides[currentSlide=e].classList.add("active"),dots[currentSlide].classList.add("active"),updateParallax(),setTimeout(()=>{isAnimating=!1},t)}function nextSlide(){showSlide((currentSlide+1)%slides.length)}function prevSlide(){showSlide((currentSlide-1+slides.length)%slides.length)}function startAutoPlay(){clearInterval(autoPlayInterval),stopProgressBar(),isPausedByUser||(startProgressBar(),autoPlayInterval=setInterval(()=>{nextSlide(),stopProgressBar(),startProgressBar()},slideDuration))}function startProgressBar(){const e=document.getElementById("progressBar");function t(){const t=Date.now()-progressStart,n=Math.min(t/slideDuration,1),s=100*n;e.style.width=s+"%",n>=1&&(e.style.width="100%")}e&&(e.style.width="0%",progressStart=Date.now(),clearInterval(progressInterval),progressInterval=setInterval(t,50),t())}function stopProgressBar(){clearInterval(progressInterval);const e=document.getElementById("progressBar");e&&(e.style.width="0%")}function openOverlay(e){const t=document.getElementById(e+"Overlay");t.classList.add("active"),clearInterval(autoPlayInterval);const n=t.querySelector(".overlay-content");n&&setTimeout(()=>{const e=n.querySelector(".scroll-indicator");if(e){n.scrollHeight>n.clientHeight&&(e.classList.add("show"),n.classList.add("has-scroll"))}},100)}function closeOverlay(e){document.getElementById(e+"Overlay").classList.remove("active"),isPausedByUser||startAutoPlay()}function handleSubmit(e){e.preventDefault(),alert("Thank you for your message! We will get back to you soon."),e.target.reset(),closeOverlay("contact")}function moveShapeToRandomPosition(e){const t=60*Math.random()+10,n=80*Math.random()+5;e.style.top=t+"%",e.style.left=n+"%",e.style.bottom="auto",e.style.right="auto";const s=360*Math.random();e.style.transform=`rotate(${s}deg)`,setTimeout(()=>{e.style.transform=""},800)}function autoMoveShapes(){document.querySelectorAll(".parallax-shape").forEach((e,t)=>{setTimeout(()=>{moveShapeToRandomPosition(e)},2e3*t)})}function handleScrollIndicator(e){const t=e.querySelector(".scroll-indicator");function n(){const n=e.scrollHeight>e.clientHeight,s=e.scrollTop+e.clientHeight>=e.scrollHeight-10;n&&!s?t.classList.add("show"):t.classList.remove("show"),n&&!s?e.classList.add("has-scroll"):e.classList.remove("has-scroll")}t&&(setTimeout(n,100),e.addEventListener("scroll",n))}menuToggle.addEventListener("click",()=>{menuToggle.classList.toggle("active"),mainNav.classList.toggle("active")}),document.querySelectorAll("nav a").forEach(e=>{e.addEventListener("click",()=>{window.innerWidth<=768&&(menuToggle.classList.remove("active"),mainNav.classList.remove("active"))})}),slider.addEventListener("mousemove",e=>{const t=slider.getBoundingClientRect();mouseX=(e.clientX-t.left)/t.width-.5,mouseY=(e.clientY-t.top)/t.height-.5,updateParallax()}),nextBtn.addEventListener("click",()=>{clearInterval(autoPlayInterval),nextSlide(),isPausedByUser||startAutoPlay()}),prevBtn.addEventListener("click",()=>{clearInterval(autoPlayInterval),prevSlide(),isPausedByUser||startAutoPlay()}),dots.forEach(e=>{e.addEventListener("click",()=>{clearInterval(autoPlayInterval),showSlide(parseInt(e.getAttribute("data-slide"))),isPausedByUser||startAutoPlay()})}),document.addEventListener("keydown",e=>{"ArrowLeft"===e.key?(clearInterval(autoPlayInterval),prevSlide(),isPausedByUser||startAutoPlay()):"ArrowRight"===e.key?(clearInterval(autoPlayInterval),nextSlide(),isPausedByUser||startAutoPlay()):"h"===e.key.toLowerCase()&&uiToggleBtn.click()}),document.querySelectorAll(".overlay").forEach(e=>{e.addEventListener("click",t=>{t.target===e&&(e.classList.remove("active"),isPausedByUser||startAutoPlay())})}),document.addEventListener("keydown",e=>{"Escape"===e.key&&(document.querySelectorAll(".overlay").forEach(e=>{e.classList.remove("active")}),isPausedByUser||startAutoPlay())}),startAutoPlay(),updateParallax(),window.innerWidth<=768&&slider.removeEventListener("mousemove",updateParallax),document.querySelectorAll(".parallax-shape").forEach(e=>{e.addEventListener("click",function(e){e.stopPropagation(),moveShapeToRandomPosition(this)})}),setInterval(autoMoveShapes,15e3),setTimeout(autoMoveShapes,5e3),document.querySelectorAll(".overlay-content").forEach(e=>{handleScrollIndicator(e)});const fullscreenBtn=document.getElementById("fullscreenBtn"),expandIcon='<svg viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>',collapseIcon='<svg viewBox="0 0 24 24"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>';fullscreenBtn.addEventListener("click",()=>{window.innerWidth<=768&&(menuToggle.classList.remove("active"),mainNav.classList.remove("active")),document.fullscreenElement||document.webkitFullscreenElement||document.mozFullScreenElement?(document.exitFullscreen?document.exitFullscreen():document.webkitExitFullscreen?document.webkitExitFullscreen():document.mozCancelFullScreen?document.mozCancelFullScreen():document.msExitFullscreen&&document.msExitFullscreen(),fullscreenBtn.classList.remove("active"),fullscreenBtn.innerHTML=expandIcon):(document.documentElement.requestFullscreen?document.documentElement.requestFullscreen():document.documentElement.webkitRequestFullscreen?document.documentElement.webkitRequestFullscreen():document.documentElement.mozRequestFullScreen?document.documentElement.mozRequestFullScreen():document.documentElement.msRequestFullscreen&&document.documentElement.msRequestFullscreen(),fullscreenBtn.classList.add("active"),fullscreenBtn.innerHTML=collapseIcon)}),document.addEventListener("fullscreenchange",()=>{document.fullscreenElement||(fullscreenBtn.classList.remove("active"),fullscreenBtn.innerHTML=expandIcon)}),document.addEventListener("webkitfullscreenchange",()=>{document.webkitFullscreenElement||(fullscreenBtn.classList.remove("active"),fullscreenBtn.innerHTML=expandIcon)}),document.addEventListener("mozfullscreenchange",()=>{document.mozFullScreenElement||(fullscreenBtn.classList.remove("active"),fullscreenBtn.innerHTML=expandIcon)});const playPauseBtn=document.getElementById("playPauseBtn"),playIcon='<svg viewBox="0 0 24 24"><path d="M5 3l14 9-14 9V3z"/></svg>',pauseIcon='<svg viewBox="0 0 24 24"><path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/></svg>';playPauseBtn.innerHTML=pauseIcon,playPauseBtn.addEventListener("click",e=>{e.stopPropagation(),isPausedByUser?(isPausedByUser=!1,startAutoPlay(),playPauseBtn.innerHTML=pauseIcon,playPauseBtn.classList.remove("paused")):(isPausedByUser=!0,clearInterval(autoPlayInterval),stopProgressBar(),playPauseBtn.innerHTML=playIcon,playPauseBtn.classList.add("paused"))});const decreaseBtn=document.getElementById("decreaseDuration"),increaseBtn=document.getElementById("increaseDuration"),durationDisplay=document.getElementById("durationDisplay"),progressBarContainer=document.querySelector(".progress-bar-container"),durationControls=document.querySelector(".duration-controls");let currentDuration=5;function updateDuration(e){currentDuration=Math.max(1,Math.min(9,e)),slideDuration=1e3*currentDuration,durationDisplay.innerHTML=currentDuration+"<span>s</span>";const t=getTransitionDuration();document.documentElement.style.setProperty("--slide-transition-duration",t+"ms"),isPausedByUser||startAutoPlay()}document.documentElement.style.setProperty("--slide-transition-duration","700ms"),decreaseBtn.addEventListener("click",e=>{e.stopPropagation(),updateDuration(currentDuration-1)}),increaseBtn.addEventListener("click",e=>{e.stopPropagation(),updateDuration(currentDuration+1)});let uiVisible=!0;const uiToggleBtn=document.getElementById("uiToggleBtn"),eyeIcon=document.getElementById("eyeIcon");uiToggleBtn.title="Hide UI Elements (Press H)";const eyeOpenPath='<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>',eyeClosedPath='<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>';uiToggleBtn.addEventListener("click",e=>{e.preventDefault(),e.stopPropagation();const t=document.querySelectorAll(".ui-element");uiVisible?(t.forEach(e=>e.classList.add("hidden")),uiVisible=!1,uiToggleBtn.classList.add("ui-hidden"),eyeIcon.innerHTML=eyeClosedPath,uiToggleBtn.title="Show UI Elements (Press H)"):(t.forEach(e=>e.classList.remove("hidden")),uiVisible=!0,uiToggleBtn.classList.remove("ui-hidden"),eyeIcon.innerHTML=eyeOpenPath,uiToggleBtn.title="Hide UI Elements (Press H)")});
+/* ================= SLIDER ================= */
+
+const slider = $("#slider");
+const slides = $$(".slide");
+const prevBtn = $(".nav-arrow.prev");
+const nextBtn = $(".nav-arrow.next");
+
+let autoPlayInterval;
+let currentSlide = 0;
+let isAnimating = false;
+let mouseX = 0;
+let mouseY = 0;
+let slideDuration = 5000;
+
+/* ---------- Parallax ---------- */
+function updateParallax() {
+  if (!slides[currentSlide]) return;
+
+  const bg = slides[currentSlide].querySelector(".background-layer");
+  const shapes = $$(".parallax-shape");
+
+  if (bg) {
+    bg.style.transform = `translate(${20 * mouseX}px, ${20 * mouseY}px)`;
+  }
+
+  shapes.forEach((s, i) => {
+    const n = 15 * (i + 1);
+    s.style.transform = `translate(${mouseX * n}px, ${mouseY * n}px)`;
+  });
+}
+
+/* ---------- Slides ---------- */
+function showSlide(index) {
+  if (isAnimating || !slides.length) return;
+  isAnimating = true;
+
+  slides.forEach((s) => s.classList.remove("active", "prev"));
+  slides[currentSlide]?.classList.add("prev");
+
+  currentSlide = index;
+  slides[currentSlide]?.classList.add("active");
+
+  updateParallax();
+  setTimeout(() => (isAnimating = false), 700);
+}
+
+function nextSlide() {
+  showSlide((currentSlide + 1) % slides.length);
+}
+
+function prevSlide() {
+  showSlide((currentSlide - 1 + slides.length) % slides.length);
+}
+
+/* ---------- Autoplay ---------- */
+function startAutoPlay() {
+  clearInterval(autoPlayInterval);
+  autoPlayInterval = setInterval(nextSlide, slideDuration);
+}
+
+/* ---------- Events ---------- */
+if (prevBtn) prevBtn.addEventListener("click", prevSlide);
+if (nextBtn) nextBtn.addEventListener("click", nextSlide);
+
+if (slider) {
+  slider.addEventListener("mousemove", (e) => {
+    const r = slider.getBoundingClientRect();
+    mouseX = e.clientX / r.width - 0.5;
+    mouseY = e.clientY / r.height - 0.5;
+    updateParallax();
+  });
+}
+
+startAutoPlay();
+
+/* ================= OVERLAYS ================= */
+
+function openOverlay(name) {
+  const el = $("#" + name + "Overlay");
+  if (!el) return;
+  el.classList.add("active");
+  clearInterval(autoPlayInterval);
+}
+
+function closeOverlay(name) {
+  const el = $("#" + name + "Overlay");
+  if (!el) return;
+  el.classList.remove("active");
+  startAutoPlay();
+}
+
+/* ================= ADMIN (MONGO CONNECTED) ================= */
+
+let users = [];
+
+/* ---------- Fetch Users ---------- */
+async function fetchUsers() {
+  try {
+    const res = await fetch("http://localhost:5000/api/users");
+    users = await res.json();
+    renderUsers();
+  } catch (err) {
+    console.error("Failed to fetch users:", err);
+  }
+}
+
+/* ---------- Render Users ---------- */
+function renderUsers() {
+  const list = $("#usersList");
+  if (!list) return;
+
+  list.innerHTML = "";
+
+  if (users.length === 0) {
+    list.innerHTML = "<p>No users registered yet.</p>";
+    return;
+  }
+
+  users.forEach((u, i) => {
+    const div = document.createElement("div");
+    div.className = "testimonial-card";
+    div.innerHTML = `
+      <p><strong>${u.username}</strong> — ${u.role}</p>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="submit-btn" onclick="viewUserPhotos(${i})">
+          View Photos
+        </button>
+
+        <button class="submit-btn" onclick="downloadUserPhotos(${i})">
+          Download All
+        </button>
+      </div>
+    `;
+    list.appendChild(div);
+  });
+}
+
+/* ---------- View Photos ---------- */
+function viewUserPhotos(index) {
+  const user = users[index];
+  $("#photoUserTitle").innerText =
+    "Photos uploaded by " + user.username;
+
+  const grid = $("#photoGrid");
+  grid.innerHTML = "";
+
+  if (!user.photos || user.photos.length === 0) {
+    grid.innerHTML = "<p>No photos uploaded yet.</p>";
+  } else {
+    user.photos.forEach((p) => {
+      const img = document.createElement("img");
+      img.src = p;
+      img.className = "overlay-image";
+      grid.appendChild(img);
+    });
+  }
+
+  openOverlay("photos");
+}
+
+/* ---------- DOWNLOAD USER PHOTOS ---------- */
+function downloadUserPhotos(index) {
+  const user = users[index];
+
+  if (!user.photos || user.photos.length === 0) {
+    alert("No photos to download.");
+    return;
+  }
+
+  user.photos.forEach((base64, i) => {
+    const link = document.createElement("a");
+    link.href = base64;
+    link.download = `${user.username}_photo_${i + 1}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  });
+}
+
+/* ---------- Register User ---------- */
+async function registerUser() {
+  const username = $("#regUsername").value.trim();
+  const password = $("#regPassword").value.trim();
+  const role = $("#regRole").value;
+  const msg = $("#registerSuccessMsg");
+
+  if (!username || !password) {
+    alert("Username and password required");
+    return;
+  }
+
+  try {
+    const res = await fetch("http://localhost:5000/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password, role })
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      alert(err.error || "Registration failed");
+      return;
+    }
+
+    msg.style.display = "block";
+
+    $("#regUsername").value = "";
+    $("#regPassword").value = "";
+    $("#regRole").value = "guest";
+
+    await fetchUsers();
+
+    setTimeout(() => {
+      msg.style.display = "none";
+    }, 3000);
+
+  } catch (err) {
+    console.error("Register error:", err);
+  }
+}
+
+/* ---------- INIT ---------- */
+window.addEventListener("load", fetchUsers);
+
+/* =========================================================
+   UI TOGGLE (EYE BUTTON)
+========================================================= */
+
+(function () {
+  const uiToggleBtn = document.getElementById("uiToggleBtn");
+  const eyeIcon = document.getElementById("eyeIcon");
+  let uiVisible = true;
+
+  if (!uiToggleBtn || !eyeIcon) return;
+
+  const eyeOpen = `
+    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+    <circle cx="12" cy="12" r="3"/>
+  `;
+
+  const eyeClosed = `
+    <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8
+      a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4
+      c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+    <line x1="1" y1="1" x2="23" y2="23"/>
+  `;
+
+  uiToggleBtn.addEventListener("click", () => {
+    const uiEls = document.querySelectorAll(".ui-element");
+    uiVisible = !uiVisible;
+
+    uiEls.forEach(el =>
+      el.classList.toggle("hidden", !uiVisible)
+    );
+
+    eyeIcon.innerHTML = uiVisible ? eyeOpen : eyeClosed;
+  });
+})();
+
+/* ---------- FULLSCREEN ---------- */
+(function () {
+  const btn = document.getElementById("fullscreenBtn");
+  if (!btn) return;
+
+  btn.addEventListener("click", () => {
+    if (document.fullscreenElement || document.webkitFullscreenElement) {
+      document.exitFullscreen?.() ||
+        document.webkitExitFullscreen?.();
+    } else {
+      document.documentElement.requestFullscreen?.() ||
+        document.documentElement.webkitRequestFullscreen?.();
+    }
+  });
+})();
+/* ================= MENU SAVE ================= */
+
+async function saveMenu() {
+  const content = document.getElementById("menuTextarea").value.trim();
+  const msg = document.getElementById("menuSavedMsg");
+
+  if (!content) {
+    alert("Menu cannot be empty");
+    return;
+  }
+
+  try {
+    const res = await fetch("http://localhost:5000/api/menu", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-user-id": localStorage.getItem("userId"),
+        "x-user-role": localStorage.getItem("role")
+      },
+      body: JSON.stringify({ content })
+    });
+
+    if (!res.ok) {
+      alert("Failed to save menu");
+      return;
+    }
+
+    msg.style.display = "block";
+    setTimeout(() => (msg.style.display = "none"), 3000);
+  } catch (err) {
+    console.error("Menu save error:", err);
+  }
+}
