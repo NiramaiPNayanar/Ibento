@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../admin/assets/admin.css">
+
+</head>
+<body>
+    <!-- UI Toggle Button - Always Visible -->
+    <button class="ui-toggle-btn" id="uiToggleBtn" aria-label="Toggle UI Visibility">
+        <svg viewBox="0 0 24 24" id="eyeIcon">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+            <circle cx="12" cy="12" r="3"/>
+        </svg>
+    </button>
+
+    <!-- Header -->
+    <header class="ui-element">
+        <div class="logo">Ibento</div>
+        <nav id="mainNav">
+            <a onclick="openOverlay('about')">About</a>
+            <a onclick="openOverlay('contact')">Contact</a>
+            <button class="fullscreen-btn" id="fullscreenBtn" aria-label="Toggle Fullscreen">
+                <svg viewBox="0 0 24 24">
+                    <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                </svg>
+            </button>
+        </nav>
+        <div class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </header>
+
+    <!-- Slider -->
+    <div class="slider-wrapper">
+        <div class="slider-container" id="slider">
+            <!-- Slide 1 -->
+            <div class="slide active" data-index="0">
+                <div class="parallax-layer background-layer">
+                    <img src="images/mountain-dreams.jpg" alt="Mountains">
+                </div>
+          
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="slide" data-index="1">
+                <div class="parallax-layer background-layer">
+                    <img src="images/forest-whispers.jpg" alt="Forest">
+                </div>
+             
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="slide" data-index="2">
+                <div class="parallax-layer background-layer">
+                    <img src="images/ocean-serenity.jpg" alt="Ocean">
+                </div>
+
+            </div>
+
+            <!-- Slide 4 -->
+            <div class="slide" data-index="3">
+                <div class="parallax-layer background-layer">
+                    <img src="images/golden-hour.jpg" alt="Sunset">
+                </div>
+   
+            </div>
+
+            <!-- Slide 5 -->
+            <div class="slide" data-index="4">
+                <div class="parallax-layer background-layer">
+                    <img src="images/spring-bloom.jpg" alt="Flowers">
+                </div>
+   
+            </div>
+
+            <!-- Slide 6 -->
+            <div class="slide" data-index="5">
+                <div class="parallax-layer background-layer">
+                    <img src="images/desert-vastness.jpg" alt="Desert">
+                </div>
+
+            </div>
+
+            <!-- Slide 7 -->
+            <div class="slide" data-index="6">
+                <div class="parallax-layer background-layer">
+                    <img src="images/waterfall-majesty.jpg" alt="Waterfall">
+                </div>
+   
+            </div>
+
+            <!-- Slide 8 -->
+            <div class="slide" data-index="7">
+                <div class="parallax-layer background-layer">
+                    <img src="images/wild-encounters.jpg" alt="Wildlife">
+                </div>
+    
+            </div>
+
+            <!-- Slide 9 -->
+            <div class="slide" data-index="8">
+                <div class="parallax-layer background-layer">
+                    <img src="images/summit-glory.jpg" alt="Mountain Peak">
+                </div>
+  
+            </div>
+
+            <!-- Navigation -->
+            <div class="nav-arrow prev ui-element">‹</div>
+            <div class="nav-arrow next ui-element">›</div>
+
+            <!-- Dots -->
+            <div class="dots-container ui-element">
+                <span class="dot active" data-slide="0"></span>
+                <span class="dot" data-slide="1"></span>
+                <span class="dot" data-slide="2"></span>
+                <span class="dot" data-slide="3"></span>
+                <span class="dot" data-slide="4"></span>
+                <span class="dot" data-slide="5"></span>
+                <span class="dot" data-slide="6"></span>
+                <span class="dot" data-slide="7"></span>
+                <span class="dot" data-slide="8"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Global Parallax Shapes -->
+    <div class="parallax-shape shape-1 ui-element"></div>
+    <div class="parallax-shape shape-2 ui-element"></div>
+
+    <!-- Play/Pause Button -->
+    <button class="play-pause-btn ui-element" id="playPauseBtn" aria-label="Play/Pause Slideshow">
+        <svg viewBox="0 0 24 24">
+            <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+        </svg>
+    </button>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar-container ui-element">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Duration Controls -->
+    <div class="duration-controls ui-element">
+        <button class="duration-btn" id="decreaseDuration" aria-label="Decrease Duration">−</button>
+        <div class="duration-display" id="durationDisplay">5<span>s</span></div>
+        <button class="duration-btn" id="increaseDuration" aria-label="Increase Duration">+</button>
+    </div>
+
+    <!-- About Overlay -->
+    <div class="overlay" id="aboutOverlay">
+        <div class="overlay-content">
+            <button class="close-btn" onclick="closeOverlay('about')">×</button>
+            <h2>About Us</h2>
+            <p>Welcome to Living Parallax, where visual storytelling meets cutting-edge design. We believe in the power of images to inspire, captivate, and transport viewers to extraordinary places.</p>
+            <p>Our mission is to showcase the world's most breathtaking landscapes and moments through an immersive, interactive experience. Each image is carefully curated to evoke emotion and wonder, utilizing parallax scrolling technology to create depth and movement that brings photography to life.</p>
+            <p>Every scroll reveals new perspectives, every movement adds dimension, and every image tells a story waiting to be discovered.</p>
+            <p>Take control of your time with <a href="https://timermo.com" rel="nofollow" target="_blank">TimerMo</a> today. Bring your designs to life with <a href="https://www.vectorsticker.com" rel="nofollow" target="_blank">VectorSticker</a> resources.</p>
+            <p>Living Parallax is a free HTML template designed by <a href="https://www.tooplate.com" target="_blank" rel="nofollow noopener">Tooplate</a> for creating stunning fullscreen image galleries.</p>
+            <p>UI toggle button to hide/show all interface elements for distraction-free viewing</p>
+            <p>Keyboard navigation (Arrow keys for slides, H key for UI toggle)</p>
+            <p>Auto-play controls with play/pause functionality</p>
+            <p>Smooth overlay panels for About, Testimonials, and Contact sections</p>
+            <p>Beautiful stock photography provided by <a href="https://unsplash.com" target="_blank" rel="nofollow noopener">Unsplash</a>, enhanced with interactive parallax effects and customizable slideshow timing.</p>
+            <img src="images/about-mountain.jpg" alt="Mountain landscape" class="overlay-image">
+        </div>
+    </div>
+
+
+    <!-- Contact Overlay -->
+    <div class="overlay" id="contactOverlay">
+        <div class="overlay-content">
+            <button class="close-btn" onclick="closeOverlay('contact')">×</button>
+            <h2>Contact Us</h2>
+            <p>Have a question or want to collaborate? We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible.</p>
+            
+            <form class="contact-form" onsubmit="handleSubmit(event)">
+                <label>Name</label>
+                <input type="text" name="name" placeholder="Your name" required>
+                
+                <label>Email</label>
+                <input type="email" name="email" placeholder="your.email@example.com" required>
+                
+                <label>Subject</label>
+                <input type="text" name="subject" placeholder="What's this about?" required>
+                
+                <label>Message</label>
+                <textarea name="message" placeholder="Tell us more..." required></textarea>
+                
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+            
+            <div class="contact-address">
+                <h3>Visit Us</h3>
+                <p>123 Gallery Street, Art District<br>
+                San Francisco, CA 94102<br>
+                United States<br>
+                <a href="tel:+14155551234">+1 (415) 555-1234</a> | <a href="mailto:hello@livingparallax.com">hello@livingparallax.com</a></p>
+            </div>
+            
+            <div class="map-container">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.019720565487!2d-122.41941548468169!3d37.77492997975916!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8085809c6c8f4459%3A0xb10ed6d9b5050fa5!2sTwitter%20HQ!5e0!3m2!1sen!2sus!4v1635959045789!5m2!1sen!2sus" 
+                    width="100%" 
+                    height="400" 
+                    style="border:0; border-radius: 12px; opacity: 0.9;" 
+                    allowfullscreen="" 
+                    loading="lazy" 
+                    referrerpolicy="no-referrer-when-downgrade"
+                    class="overlay-map">
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+  
+ 
+<script src="./assets/admin.js"></script>
+</body>
+</html>

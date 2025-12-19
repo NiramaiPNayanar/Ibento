@@ -1,0 +1,162 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <title>Ibento | Login</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+
+  <!-- HTML5 UP Main CSS -->
+  <link rel="stylesheet" href="assets/css/main.css" />
+
+  <!-- PERMANENT SCROLLBAR HIDE (scroll still works) -->
+  <style>
+    /* Chrome, Edge, Safari */
+    ::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+    }
+
+    /* Firefox */
+    html {
+      scrollbar-width: none;
+    }
+
+    /* IE / old Edge */
+    body {
+      -ms-overflow-style: none;
+    }
+  </style>
+</head>
+
+<body class="is-preload">
+
+  <!-- Header -->
+  <section id="header">
+    <header class="major">
+      <h1>Ibento</h1>
+      <p>Welcome back. Please log in to continue.</p>
+    </header>
+  </section>
+
+  <!-- Login Section -->
+  <section class="main special" id="loginSection">
+    <div class="container">
+      <div class="content">
+
+        <header class="major">
+          <h2>Login</h2>
+        </header>
+
+        <form id="loginForm" novalidate>
+          <div class="row gtr-uniform">
+
+            <div class="col-12">
+              <input
+                type="email"
+                id="email"
+                placeholder="Email address"
+                required
+              />
+            </div>
+
+            <div class="col-12">
+              <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                minlength="6"
+                required
+              />
+            </div>
+
+            <div class="col-12">
+              <ul class="actions special">
+                <li>
+                  <button type="submit" class="button primary">
+                    Login
+                  </button>
+                </li>
+              </ul>
+            </div>
+
+            <div class="col-12">
+              <p id="errorMsg" style="color:#d9534f; display:none;">
+                Please enter a valid email and password (min 6 characters).
+              </p>
+            </div>
+
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <section id="footer">
+    <footer>
+      <ul class="icons">
+        <li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+        <li><a href="#" class="icon brands alt fa-facebook-f"><span class="label">Facebook</span></a></li>
+        <li><a href="#" class="icon brands alt fa-instagram"><span class="label">Instagram</span></a></li>
+        <li><a href="#" class="icon brands alt fa-dribbble"><span class="label">Dribbble</span></a></li>
+        <li><a href="#" class="icon solid alt fa-envelope"><span class="label">Email</span></a></li>
+      </ul>
+    </footer>
+  </section>
+
+  <!-- HTML5 UP Scripts -->
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/jquery.scrollex.min.js"></script>
+  <script src="assets/js/jquery.scrolly.min.js"></script>
+  <script src="assets/js/browser.min.js"></script>
+  <script src="assets/js/breakpoints.min.js"></script>
+  <script src="assets/js/util.js"></script>
+  <script src="assets/js/main.js"></script>
+
+  <!-- SCROLL CONTROL + LOGIN LOGIC -->
+  <script>
+    /* Always start at top on reload/open */
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+
+    window.addEventListener("load", () => {
+      window.scrollTo(0, 0);
+
+      /* Auto-scroll after 1.5 seconds */
+      setTimeout(() => {
+        window.scrollBy({
+          top: window.innerHeight * 0.9,
+          behavior: "smooth"
+        });
+      }, 1500);
+    });
+
+    /* Client-side validation */
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const email = document.getElementById("email");
+      const password = document.getElementById("password");
+      const errorMsg = document.getElementById("errorMsg");
+
+      if (!email.checkValidity() || !password.checkValidity()) {
+        errorMsg.style.display = "block";
+        return;
+      }
+
+      errorMsg.style.display = "none";
+
+      console.log("Login data:", {
+        email: email.value,
+        password: password.value
+      });
+
+      // Backend integration later
+    });
+  </script>
+
+</body>
+</html>
