@@ -8,7 +8,7 @@ Guests upload photos via a QR page, admins manage users and event content, and s
 
 ## Features
 
-### User Roles
+### User Roles 
 
 **Guest**
 - Login via QR
